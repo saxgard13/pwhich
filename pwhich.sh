@@ -1,19 +1,29 @@
 #!/bin/bash
 
-# Si aucun argument n'est fourni (ex: lancement via le menu d'applications)
+# --pause : garde la fenêtre ouverte à la fin (lancement via le menu d'applications)
+pause=false
+if [ "$1" = "--pause" ]; then
+    pause=true
+    shift
+fi
+
+# Si aucun argument n'est fourni, on demande le nom interactivement.
+# read sans IFS personnalisé retire les espaces en début et fin de saisie.
 if [ -z "$1" ]; then
     echo "🔍 pwhich - Inspecteur de paquets"
     echo "----------------------------------------"
-    read -p "Entrez le nom du paquet/logiciel à vérifier : " app
+    read -r -p "Entrez le nom du paquet/logiciel à vérifier : " app
     echo ""
 else
-    app="$1"
+    read -r app <<< "$1"
 fi
 
 # Si l'utilisateur valide à vide, on quitte
 if [ -z "$app" ]; then
     echo "Aucun nom fourni. Annulation."
-    read -p "Appuie sur Entrée pour fermer..."
+    if [ "$pause" = true ]; then
+        read -r -p "Appuie sur Entrée pour fermer..."
+    fi
     exit 0
 fi
 
@@ -65,6 +75,6 @@ fi
 echo "----------------------------------------"
 
 # Maintient la fenêtre ouverte si lancée depuis l'interface graphique
-if [ ! -t 0 ] || [ -z "$1" ]; then
-    read -p "Appuie sur Entrée pour quitter..."
+if [ "$pause" = true ]; then
+    read -r -p "Appuie sur Entrée pour quitter..."
 fi
