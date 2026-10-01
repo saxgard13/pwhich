@@ -6,5 +6,5 @@ Comment=Inspecteur d'origine des paquets (APT, Snap, Flatpak)
 Exec=pwhich --pause
 Icon=system-search
 Terminal=true
-Categories=System;Utility;
+Categories=System;
 Keywords=package;apt;snap;flatpak;which;find;
