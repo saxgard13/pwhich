@@ -1,4 +1,8 @@
 #!/bin/bash
+set -e
+
+# Permet de lancer le script depuis n'importe quel dossier
+cd "$(dirname "$0")"
 
 echo "🚀 Installation de 'pwhich'..."
 
@@ -13,7 +17,7 @@ cp pwhich.desktop ~/.local/share/applications/
 echo "✔ Raccourci .desktop installé"
 
 # 3. Rafraîchissement de la base de données des applications
-update-desktop-database ~/.local/share/applications/ 2>/dev/null
+update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
 echo "✅ Installation terminée avec succès !"
 echo "Tu peux maintenant utiliser la commande : pwhich <nom>"
