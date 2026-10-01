@@ -7,7 +7,7 @@
 ## ✨ Fonctionnalités
 
 - **Recherche unifiée** : Interroge simultanément APT (`dpkg`), Snap et Flatpak.
-- **Localisation des binaires** : Affiche le chemin d'accès de l'exécutable (`which`).
+- **Localisation des binaires** : Affiche le chemin d'accès de l'exécutable et, s'il s'agit d'un lien symbolique, sa cible réelle.
 - **Gestion des noms partiels** : Filtre intelligemment les paquets correspondants.
 - **Raccourci d'application GNOME** : Intégration au menu des applications avec lancement en terminal interactif.
 - **Installation système** : Disponible globalement via `/usr/local/bin/pwhich`.
@@ -24,13 +24,21 @@
 
 ---
 
+## 📋 Prérequis
+
+- Ubuntu / Debian (ou dérivé) : la recherche APT repose sur `dpkg`.
+- `bash` et `sudo` (pour copier l'exécutable dans `/usr/local/bin`).
+- Optionnel : `snap` et `flatpak`. Ils sont ignorés s'ils ne sont pas installés.
+
+---
+
 ## 🚀 Installation
 
-1. Cloner le dépôt ou se placer dans le dossier du projet :
+1. Cloner le dépôt et se placer dans le dossier du projet :
+   git clone https://github.com/saxgard13/pwhich.git
    cd pwhich
 
-2. Rendre les scripts exécutables et lancer l'installation :
-   chmod +x install.sh uninstall.sh pwhich.sh
+2. Lancer l'installation :
    ./install.sh
 
 Le script d'installation va :
@@ -49,6 +57,12 @@ Tu peux lancer l'outil depuis n'importe quel dossier :
 pwhich keepassxc
 pwhich firefox
 pwhich docker
+
+Sans argument, `pwhich` demande le nom à inspecter.
+
+L'option `--pause` garde le terminal ouvert à la fin (utilisée par le raccourci du menu d'applications) :
+
+pwhich --pause
 
 ### Via l'interface graphique (Menu d'applications)
 
@@ -70,6 +84,11 @@ pwhich docker
 🟢 Paquet Snap :
    - firefox              157.0-1             
 ----------------------------------------
+
+Si l'exécutable est un lien symbolique, une ligne supplémentaire indique sa cible :
+
+📍 Exécutable : /usr/bin/c++
+🔗 Lien vers  : /usr/bin/x86_64-linux-gnu-g++-15
 
 ---
 
