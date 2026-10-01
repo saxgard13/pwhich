@@ -21,16 +21,21 @@ echo "🔍 Recherche d'origine pour : $app"
 echo "----------------------------------------"
 
 # 1. Localisation du binaire système
-bin=$(which "$app" 2>/dev/null)
+bin=$(type -P -- "$app")
 if [ -n "$bin" ]; then
     echo "📍 Exécutable : $bin"
+    # Affiche la cible réelle si l'exécutable est un lien symbolique
+    real=$(readlink -f -- "$bin")
+    if [ "$real" != "$bin" ]; then
+        echo "🔗 Lien vers  : $real"
+    fi
 else
     echo "📍 Exécutable : Non trouvé dans le PATH"
 fi
 echo ""
 
 # 2. Recherche APT / DEB
-deb=$(dpkg -l "*$app*" 2>/dev/null | grep ^ii)
+deb=$(dpkg -l -- "*$app*" 2>/dev/null | grep ^ii)
 if [ -n "$deb" ]; then
     echo "📦 Paquet APT (DEB) :"
     echo "$deb" | awk '{printf "   - %-25s %-20s\n", $2, $3}'
@@ -39,7 +44,7 @@ fi
 
 # 3. Recherche Snap
 if command -v snap &>/dev/null; then
-    snap_res=$(snap list 2>/dev/null | grep -i "$app")
+    snap_res=$(snap list 2>/dev/null | grep -iF -- "$app")
     if [ -n "$snap_res" ]; then
         echo "🟢 Paquet Snap :"
         echo "$snap_res" | awk '{printf "   - %-25s %-20s\n", $1, $2}'
@@ -49,7 +54,7 @@ fi
 
 # 4. Recherche Flatpak
 if command -v flatpak &>/dev/null; then
-    fp_res=$(flatpak list 2>/dev/null | grep -i "$app")
+    fp_res=$(flatpak list 2>/dev/null | grep -iF -- "$app")
     if [ -n "$fp_res" ]; then
         echo "🔵 Paquet Flatpak :"
         echo "$fp_res" | awk '{printf "   - %-25s %-20s (%s)\n", $1, $2, $3}'
