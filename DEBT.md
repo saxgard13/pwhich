@@ -18,7 +18,7 @@ Re-evaluate: 2026-12 or on the first config or credential file added to the repo
 
 ## Features
 
-Goal: answer "how did I install this application?" reliably. Today `pwhich` does a name-based search, not an ownership check.
+Goal: answer "how did I install this application, and how do I update it?" reliably. Today `pwhich` does a name-based search, not an ownership check, and gives no update guidance.
 
 [NOTE][Debt][feature/owner-lookup] `source: feat/update` — APT lookup is name-based, not file-based.
 `dpkg -l "*$app*"` returns every package whose name contains the input (e.g. `pwhich c++` lists `libstdc++6`, unrelated libraries), not the package that installed the binary.
@@ -44,4 +44,20 @@ Proposal: tell whether the package was installed manually or pulled in as a depe
 Risk: none — nice-to-have.
 Re-evaluate: 2027-01 or once the verdict line is implemented.
 
-Suggested order: owner-lookup + verdict-line first (main gain), then path-detection, then install-history.
+[NOTE][Debt][feature/update-hint] `source: feat/update` — no guidance on how to update the application.
+Knowing the origin is only a means: the real need is knowing how to update the app, which depends on how it was installed. Proposal: after the verdict line, print an update hint per origin, and say whether the app updates itself.
+- APT: `sudo apt update && sudo apt install --only-upgrade <package>` (or the Software Updater).
+- Snap: automatic in the background; manual `sudo snap refresh <name>`.
+- Flatpak: not automatic; `flatpak update <app-id>`.
+- AppImage: no automatic update; close the app, download the new file, delete the old one, `chmod +x` the new one (some AppImages embed an updater).
+- npm global: `npm update -g <package>` (per Node version when using nvm).
+- cargo: `cargo install <crate>` to reinstall the latest version.
+- pip / pipx: `pipx upgrade <package>`.
+- `/opt` or archive: no general rule; download again from the vendor.
+Edge case: a manually installed `.deb` is not updated by APT unless a third-party repository was added (e.g. Chrome, VS Code). The script should tell the two cases apart.
+Scope: written hints only — no check for available updates (querying repositories is slow and much more complex).
+Depends on: feature/path-detection (same origin detection, plus one hint text per origin).
+Risk: low — usability only; hints may go stale if a tool changes its update command.
+Re-evaluate: 2026-12 or together with feature/path-detection.
+
+Suggested order: owner-lookup + verdict-line first (main gain), then path-detection together with update-hint (same detection mechanism), then install-history.
