@@ -1,107 +1,108 @@
 # 🔍 pwhich (Package Which)
 
-**pwhich** est un utilitaire en ligne de commande et une application graphique légère pour **Ubuntu / Linux**. Il permet d'auditer et d'identifier rapidement l'origine d'un paquet ou d'un exécutable parmi les différents gestionnaires de paquets (**APT/DEB**, **Snap** et **Flatpak**).
+**pwhich** is a lightweight command-line utility and graphical application for **Ubuntu / Linux**. It quickly audits and identifies where a package or executable comes from across the different package managers (**APT/DEB**, **Snap** and **Flatpak**).
 
 ---
 
-## ✨ Fonctionnalités
+## ✨ Features
 
-- **Recherche unifiée** : Interroge simultanément APT (`dpkg`), Snap et Flatpak.
-- **Localisation des binaires** : Affiche le chemin d'accès de l'exécutable et, s'il s'agit d'un lien symbolique, sa cible réelle.
-- **Gestion des noms partiels** : Filtre intelligemment les paquets correspondants.
-- **Raccourci d'application GNOME** : Intégration au menu des applications avec lancement en terminal interactif.
-- **Installation système** : Disponible globalement via `/usr/local/bin/pwhich`.
-
----
-
-## 🛠️ Structure du projet
-
-* pwhich.sh : Script Shell principal
-* pwhich.desktop : Fichier Desktop Entry (raccourci GNOME)
-* install.sh : Script d'installation automatique
-* uninstall.sh : Script de désinstallation
-* README.md : Documentation du projet
+- **Unified search**: Queries APT (`dpkg`), Snap and Flatpak at the same time.
+- **Binary location**: Shows the path of the executable and, if it is a symbolic link, its real target.
+- **Partial name matching**: Filters matching packages for you.
+- **GNOME application shortcut**: Integrates into the applications menu and opens an interactive terminal.
+- **System-wide install**: Available globally through `/usr/local/bin/pwhich`.
 
 ---
 
-## 📋 Prérequis
+## 🛠️ Project structure
 
-- Ubuntu / Debian (ou dérivé) : la recherche APT repose sur `dpkg`.
-- `bash` et `sudo` (pour copier l'exécutable dans `/usr/local/bin`).
-- Optionnel : `snap` et `flatpak`. Ils sont ignorés s'ils ne sont pas installés.
+* pwhich.sh: Main shell script
+* pwhich.desktop: Desktop Entry file (GNOME shortcut)
+* install.sh: Automatic installation script
+* uninstall.sh: Uninstallation script
+* DEBT.md: Known technical debt and pending decisions
+* README.md: Project documentation
+
+---
+
+## 📋 Requirements
+
+- Ubuntu / Debian (or derivative): the APT lookup relies on `dpkg`.
+- `bash` and `sudo` (to copy the executable into `/usr/local/bin`).
+- Optional: `snap` and `flatpak`. They are skipped when not installed.
 
 ---
 
 ## 🚀 Installation
 
-1. Cloner le dépôt et se placer dans le dossier du projet :
+1. Clone the repository and move into the project folder:
    git clone https://github.com/saxgard13/pwhich.git
    cd pwhich
 
-2. Lancer l'installation :
+2. Run the installation:
    ./install.sh
 
-Le script d'installation va :
-- Copier l'exécutable dans `/usr/local/bin/pwhich`.
-- Installer le fichier `.desktop` dans `~/.local/share/applications/`.
-- Mettre à jour la base de données des applications du système.
+The installation script will:
+- Copy the executable to `/usr/local/bin/pwhich`.
+- Install the `.desktop` file in `~/.local/share/applications/`.
+- Refresh the system application database.
 
 ---
 
-## 💡 Utilisation
+## 💡 Usage
 
-### En ligne de commande (Terminal)
+### Command line (Terminal)
 
-Tu peux lancer l'outil depuis n'importe quel dossier :
+You can run the tool from any folder:
 
 pwhich keepassxc
 pwhich firefox
 pwhich docker
 
-Sans argument, `pwhich` demande le nom à inspecter.
+Without an argument, `pwhich` asks for the name to inspect.
 
-L'option `--pause` garde le terminal ouvert à la fin (utilisée par le raccourci du menu d'applications) :
+The `--pause` option keeps the terminal open at the end (used by the application menu shortcut):
 
 pwhich --pause
 
-### Via l'interface graphique (Menu d'applications)
+### Graphical interface (Applications menu)
 
-1. Ouvre le lanceur d'applications d'Ubuntu (Super / Touche Windows).
-2. Cherche « pwhich ».
-3. Clique sur l'icône : un terminal s'ouvre et te demande le nom du logiciel à inspecter.
+1. Open the Ubuntu application launcher (Super / Windows key).
+2. Search for "pwhich".
+3. Click the icon: a terminal opens and asks for the name of the software to inspect.
 
 ---
 
-## 🖥️ Exemple de sortie
+## 🖥️ Example output
 
-🔍 Recherche d'origine pour : firefox
+🔍 Looking up origin of: firefox
 ----------------------------------------
-📍 Exécutable : /usr/bin/firefox
+📍 Executable: /usr/bin/firefox
 
-📦 Paquet APT (DEB) :
+📦 APT package (DEB):
    - firefox              1:1snap1-0ubuntu9.1 
 
-🟢 Paquet Snap :
+🟢 Snap package:
    - firefox              157.0-1             
 ----------------------------------------
 
-Si l'exécutable est un lien symbolique, une ligne supplémentaire indique sa cible :
+If the executable is a symbolic link, an extra line shows its target:
 
-📍 Exécutable : /usr/bin/c++
-🔗 Lien vers  : /usr/bin/x86_64-linux-gnu-g++-15
+📍 Executable: /usr/bin/c++
+🔗 Links to  : /usr/bin/x86_64-linux-gnu-g++-15
 
 ---
 
-## 🧪 Développement
+## 🧪 Development
 
-Avant chaque commit, vérifier les scripts avec [ShellCheck](https://www.shellcheck.net/) (`sudo apt install shellcheck`) :
+Before each commit, check the scripts with [ShellCheck](https://www.shellcheck.net/) (`sudo apt install shellcheck`):
 
 shellcheck pwhich.sh install.sh uninstall.sh
 
 ---
 
-## 🗑️ Désinstallation
+## 🗑️ Uninstallation
 
-Pour retirer totalement l'application du système :
+To completely remove the application from the system:
 
 ./uninstall.sh

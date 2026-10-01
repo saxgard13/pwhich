@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=pwhich
-Comment=Inspecteur d'origine des paquets (APT, Snap, Flatpak)
+Comment=Package origin inspector (APT, Snap, Flatpak)
 Exec=pwhich --pause
 Icon=system-search
 Terminal=true

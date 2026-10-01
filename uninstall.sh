@@ -1,21 +1,21 @@
 #!/bin/bash
 set -e
 
-echo "🗑️ Désinstallation de 'pwhich'..."
+echo "🗑️ Uninstalling 'pwhich'..."
 
-# 1. Suppression de l'exécutable système
+# 1. Remove the system executable
 if [ -f /usr/local/bin/pwhich ]; then
   sudo rm /usr/local/bin/pwhich
-  echo "✔ Exécutable /usr/local/bin/pwhich supprimé."
+  echo "✔ Executable /usr/local/bin/pwhich removed."
 fi
 
-# 2. Suppression du raccourci desktop
+# 2. Remove the desktop shortcut
 if [ -f ~/.local/share/applications/pwhich.desktop ]; then
   rm ~/.local/share/applications/pwhich.desktop
-  echo "✔ Raccourci d'application supprimé."
+  echo "✔ Application shortcut removed."
 fi
 
-# 3. Mise à jour de la base de données GNOME
+# 3. Refresh the application database
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
-echo "✅ Désinstallation terminée !"
+echo "✅ Uninstallation completed!"

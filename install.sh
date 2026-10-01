@@ -1,23 +1,23 @@
 #!/bin/bash
 set -e
 
-# Permet de lancer le script depuis n'importe quel dossier
+# Allow running the script from any directory
 cd "$(dirname "$0")"
 
-echo "🚀 Installation de 'pwhich'..."
+echo "🚀 Installing 'pwhich'..."
 
-# 1. Copie du script vers /usr/local/bin
+# 1. Copy the script to /usr/local/bin
 sudo cp pwhich.sh /usr/local/bin/pwhich
 sudo chmod +x /usr/local/bin/pwhich
-echo "✔ Exécutable copié dans /usr/local/bin/pwhich"
+echo "✔ Executable copied to /usr/local/bin/pwhich"
 
-# 2. Installation du fichier .desktop pour GNOME
+# 2. Install the .desktop file for GNOME
 mkdir -p ~/.local/share/applications
 cp pwhich.desktop ~/.local/share/applications/
-echo "✔ Raccourci .desktop installé"
+echo "✔ .desktop shortcut installed"
 
-# 3. Rafraîchissement de la base de données des applications
+# 3. Refresh the application database
 update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
-echo "✅ Installation terminée avec succès !"
-echo "Tu peux maintenant utiliser la commande : pwhich <nom>"
+echo "✅ Installation completed successfully!"
+echo "You can now use the command: pwhich <name>"
