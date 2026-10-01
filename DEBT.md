@@ -60,4 +60,31 @@ Depends on: feature/path-detection (same origin detection, plus one hint text pe
 Risk: low — usability only; hints may go stale if a tool changes its update command.
 Re-evaluate: 2026-12 or together with feature/path-detection.
 
+### Design rules for origin detection and update hints
+
+Apply to feature/owner-lookup, feature/path-detection, feature/verdict-line and feature/update-hint. A wrong verdict is worse than no verdict, and hint texts go stale.
+
+[NOTE][Debt][feature/detection-reliability] `source: feat/update` — path-based detection is approximate (moved binary, custom symlink).
+Rules:
+1. Trust order — authoritative sources first, path guessing last:
+   1) `dpkg -S <real path>` (APT states ownership itself) — certain.
+   2) The manager confirms the install: `snap list`, `flatpak list`, `npm ls -g`, `pipx list`, `cargo install --list` — certain.
+   3) The path (`/opt`, `~/.local/bin`, `*.AppImage`) — probable only.
+2. Three confidence levels, never an unqualified guess: `✅` certain, `🟡` probable (path-based), `❓` unknown. Prefer "Origin unknown" to a wrong verdict.
+3. Show the evidence next to the verdict (e.g. "confirmed by dpkg -S" or "based on path /opt/…") so the user can check it.
+4. On conflicting sources (e.g. Firefox: APT wrapper package + snap), list all of them and explain the link instead of picking one.
+5. Keep the classification in one function that takes a path and returns an origin, so it can be tested with a table of cases (`/snap/bin/x` → Snap, `/opt/x` → manual…). Adding tests is a separate decision: the project roadmap does not require them yet.
+Risk: medium for a public tool (misleading verdict), low for personal use.
+Re-evaluate: when implementing feature/path-detection.
+
+[NOTE][Debt][feature/hint-maintenance] `source: feat/update` — update hint texts can become outdated if a tool changes its update command.
+Rules:
+1. Keep every hint text in one place (one table or function at the top of the script): a changed command means a single edit.
+2. For origins with no stable command (AppImage, `/opt`), describe the principle ("download the new version and replace the old one") instead of a command.
+3. The core commands (`apt install --only-upgrade`, `snap refresh`, `flatpak update`) have been stable for years — low risk.
+4. Present hints as guidance and point to the official docs when a command fails.
+5. Record the date hints were last verified (re-evaluation date below).
+Risk: low — usability only.
+Re-evaluate: 2027-01, then once a year.
+
 Suggested order: owner-lookup + verdict-line first (main gain), then path-detection together with update-hint (same detection mechanism), then install-history.
