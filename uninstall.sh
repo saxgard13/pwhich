@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "🗑️ Désinstallation de 'pwhich'..."
 
@@ -15,6 +16,6 @@ if [ -f ~/.local/share/applications/pwhich.desktop ]; then
 fi
 
 # 3. Mise à jour de la base de données GNOME
-update-desktop-database ~/.local/share/applications/ 2>/dev/null
+update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
 
 echo "✅ Désinstallation terminée !"

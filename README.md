@@ -92,6 +92,14 @@ Si l'exécutable est un lien symbolique, une ligne supplémentaire indique sa ci
 
 ---
 
+## 🧪 Développement
+
+Avant chaque commit, vérifier les scripts avec [ShellCheck](https://www.shellcheck.net/) (`sudo apt install shellcheck`) :
+
+shellcheck pwhich.sh install.sh uninstall.sh
+
+---
+
 ## 🗑️ Désinstallation
 
 Pour retirer totalement l'application du système :
